@@ -19,7 +19,6 @@ void AScoreController::BeginPlay()
 	Super::BeginPlay();
 	if (ScoreTextWidget)
 	{
-		
 		pScoreTextWidget = CreateWidget<UUserWidget>(GetGameInstance(), ScoreTextWidget);
 		if (pScoreTextWidget.IsValid())
 		{
@@ -27,9 +26,16 @@ void AScoreController::BeginPlay()
 			pScoreTextWidget->AddToViewport();
 			
 			pScoreText = (UTextBlock*)pScoreTextWidget->GetWidgetFromName("ScoreText");
+			pShootsText = (UTextBlock*)pScoreTextWidget->GetWidgetFromName("Shoots");
+			pPullsText = (UTextBlock*)pScoreTextWidget->GetWidgetFromName("Pulls");
 		}
 	}
 	
+}
+
+void AScoreController::ResetShoots() {
+	Shoots = 3;
+	pShootsText->SetText(FText::FromString(FString::FromInt(Shoots)));
 }
 
 // Called every frame
@@ -48,9 +54,33 @@ void AScoreController::IncreaseScore(int amount)
 	}
 }
 
+void AScoreController::DecreaseShoots(int amount) {
+	if (pShootsText.IsValid()) {
+		Shoots -= amount;
+		pShootsText->SetText(FText::FromString(FString::FromInt(Shoots)));
+	}
+}
+
+void AScoreController::DecreasePulls(int amount) {
+	if (pPullsText.IsValid()) {
+		Pulls -= amount;
+		pPullsText->SetText(FText::FromString(FString::FromInt(Pulls)));
+	}
+}
+
 int AScoreController::GetScore() const
 {
 	return Score;
+}
+
+int AScoreController::GetShoots() const
+{
+	return Shoots;
+}
+
+int AScoreController::GetPulls() const
+{
+	return Pulls;
 }
 
 
